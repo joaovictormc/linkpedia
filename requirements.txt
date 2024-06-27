@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+httpie
+requests
+httpx
+jinja2
+python-multipart
+pillow
+bcrypt
+python-dotenv
