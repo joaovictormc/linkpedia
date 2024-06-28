@@ -1,11 +1,71 @@
 {% extends "pages/base.html" %}
 
-
-{% block subtitulo %} LinkPédia {% endblock %}
-
+{% block subtitulo %} LinkPédia - Erro {% endblock %}
 
 {% block topo %}
+<style>
+    .error-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
+    }
+    .error-card {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        max-width: 700px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+    }
+    .error-header {
+        background: #5A189A;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        padding: 2rem 1rem 1rem 1rem;
+        color: #fff;
+        font-size: 2rem;
+        font-weight: bolder;
+    }
+    .error-body {
+        padding: 2rem;
+    }
+    .error-body p {
+        font-size: 1.25rem;
+        color: #333;
+    }
+    .error-btn {
+        background: #5A189A;
+        border: none;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        text-decoration: none;
+    }
+    .error-btn:hover {
+        background: #3C096C;
+    }
+</style>
 
-    <h1>LinkPédia</h1>
+<div class="error-container">
+    <div class="error-card">
+        <div class="error-header">
+            Oops!
+        </div>
+        <div class="error-body">
+            <p>Algo deu errado. Não conseguimos encontrar a página que você estava procurando.</p>
+            <a href="/" class="error-btn">Voltar para a Página Inicial</a>
+        </div>
+    </div>
+</div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
