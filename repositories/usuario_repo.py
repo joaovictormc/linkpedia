@@ -97,3 +97,55 @@ class UsuarioRepo:
         except sqlite3.Error as ex:
             print(ex)
             return None
+        
+    @classmethod
+    def obter_por_email(cls, email: str) -> Optional[Usuario]:
+        try:
+            with obter_conexao() as conexao:
+                cursor = conexao.cursor()
+                tupla = cursor.execute(
+                    SQL_OBTER_POR_EMAIL, (email,)).fetchone()
+                if tupla is None:
+                    return None
+                return Usuario(*tupla)
+        except sqlite3.Error as ex:
+            print(ex)
+            return None
+        
+
+    @classmethod
+    def obter_por_token(cls, token: str) -> Optional[Usuario]:
+        try:
+            with obter_conexao() as conexao:
+                cursor = conexao.cursor()
+                tupla = cursor.execute(
+                    SQL_OBTER_POR_TOKEN, (token,)).fetchone()
+                if tupla is None:
+                    return None
+                return Usuario(*tupla)
+        except sqlite3.Error as ex:
+            print(ex)
+            return None
+        
+    @classmethod
+    def alterar_token(cls, id: int, token: str) -> bool:
+        try:
+            with obter_conexao() as conexao:
+                cursor = conexao.cursor()
+                cursor.execute(SQL_ALTERAR_TOKEN, (token, id))
+                return cursor.rowcount > 0
+        except sqlite3.Error as ex:
+            print(ex)
+            return False
+        
+    @classmethod
+    def obter_busca(cls) -> List[Usuario]:
+        try:
+            with obter_conexao() as conexao:
+                cursor = conexao.cursor()
+                tuplas = cursor.execute(SQL_OBTER_BUSCA).fetchall()
+                usuarios = [Usuario(*t) for t in tuplas]
+                return usuarios
+        except sqlite3.Error as ex:
+            print(ex)
+            return None
