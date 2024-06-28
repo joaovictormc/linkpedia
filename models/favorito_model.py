@@ -8,4 +8,5 @@ class Favorito:
     id: Optional[int] = None
     nome: Optional[str] = None
     url: Optional[str] = None
-    id_catedoria: Optional[str] = None
+    id_categoria: Optional[str] = None
+    id_usuario: Optional[int] = None
