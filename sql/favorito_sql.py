@@ -1,6 +1,6 @@
 SQL_CRIAR_TABELA = """
     CREATE TABLE IF NOT EXISTS favorito (
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT,
         url TEXT,
         id_categoria INTEGER,

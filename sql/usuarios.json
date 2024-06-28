@@ -1,0 +1,23 @@
+[
+    {
+        "nome": "João Silva",
+        "data_nascimento": "1990-01-01",
+        "email": "joao.silva@example.com",
+        "senha": "ef92b778bafe771e89245b89ecbc46f883f3c25eac8e6b08c9c5d8234210bb35",
+        "token": ""
+    },
+    {
+        "nome": "Maria Oliveira",
+        "data_nascimento": "1985-05-15",
+        "email": "maria.oliveira@example.com",
+        "senha": "f6cde2b9dcd05a8038590e4956a1e4dbf9ed2eab0673703b1f9a39f27d1d1b7a",
+        "token": ""
+    },
+    {
+        "nome": "Carlos Pereira",
+        "data_nascimento": "1978-12-20",
+        "email": "carlos.pereira@example.com",
+        "senha": "c8ee2e71c23ed3d6fc1e287f8a3c383acee57a2eeb2ab98bce1c9e0c59c5da76",
+        "token": ""
+    }
+]

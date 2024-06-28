@@ -6,17 +6,14 @@ from models.usuario_model import Usuario
 from repositories.usuario_repo import UsuarioRepo
 from util.cookies import NOME_COOKIE_AUTH, adicionar_cookie_auth
 
-
 async def obter_usuario_logado(request: Request) -> Optional[Usuario]:
     try:
-        token = request.cookies[NOME_COOKIE_AUTH]
-        if token.strip() == "":
+        token = request.cookies.get(NOME_COOKIE_AUTH, "").strip()
+        if not token:
             return None
-        usuario = UsuarioRepo.obter_por_token(token)
-        return usuario
+        return UsuarioRepo.obter_por_token(token)
     except KeyError:
         return None
-
 
 async def middleware_autenticacao(request: Request, call_next):
     usuario = await obter_usuario_logado(request)
@@ -25,21 +22,15 @@ async def middleware_autenticacao(request: Request, call_next):
     if response.status_code == status.HTTP_303_SEE_OTHER:
         return response
     if usuario:
-        token = request.cookies[NOME_COOKIE_AUTH]
+        token = request.cookies.get(NOME_COOKIE_AUTH)
         adicionar_cookie_auth(response, token)
     return response
-
 
 async def checar_permissao(request: Request):
     usuario = request.state.usuario if hasattr(request.state, "usuario") else None
     area_do_usuario = request.url.path.startswith("/favoritos")
-    if (area_do_usuario) and not usuario:
+    if area_do_usuario and not usuario:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    # if area_do_cliente and cliente.perfil != 1:
-    #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
-    # if area_do_admin and cliente.perfil != 2:
-    #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
-
 
 def obter_hash_senha(senha: str) -> str:
     try:
@@ -48,13 +39,11 @@ def obter_hash_senha(senha: str) -> str:
     except ValueError:
         return ""
 
-
 def conferir_senha(senha: str, hash_senha: str) -> bool:
     try:
         return bcrypt.checkpw(senha.encode(), hash_senha.encode())
     except ValueError:
         return False
-
 
 def gerar_token(length: int = 32) -> str:
     try:

@@ -67,3 +67,7 @@ SQL_OBTER_BUSCA = """
     WHERE nome LIKE ?
     ORDER BY nome
 """
+
+SQL_OBTER_QUANTIDADE = """
+    SELECT COUNT(*) FROM usuario
+"""

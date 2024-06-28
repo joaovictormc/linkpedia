@@ -1,0 +1,398 @@
+{% extends "shared/pages/base.html" %}
+{% block subtitulo %}Favoritos{% endblock %}
+{% block topo %}
+
+<style>
+    body {
+        background-color: #2b2b2b;
+        color: white;
+        overflow-x: hidden;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .sidebar {
+        height: 100vh;
+        background-color: #333;
+        padding-top: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar-collapsed {
+        transform: translateX(-100%);
+    }
+
+    .sidebar .nav-link {
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .sidebar .nav-link:hover {
+        background-color: #444;
+    }
+
+    .table thead th {
+        border-bottom: 2px solid #444;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid #444;
+    }
+
+    .table-dark th,
+    .table-dark td,
+    .table-dark thead th {
+        border-color: #444;
+    }
+
+    .search-bar {
+        margin-bottom: 20px;
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .toast {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1060;
+        background-color: #444;
+        color: white;
+    }
+
+    .nav-item {
+        position: relative;
+    }
+
+    .nav-item .badge {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        background-color: #ff0000;
+        color: white;
+    }
+
+    .modal-content {
+        font-family: 'Roboto', sans-serif;
+    }
+</style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block sidebar sidebar-collapsed" id="sidebar">
+                <div class="sidebar-sticky">
+                    <h5 class="px-3">Barra de Favoritos</h5>
+                    <ul class="nav flex-column" id="categoryList">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#"><i class="fas fa-folder"></i> Sites <span class="badge badge-light">0</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-code"></i> Programação <span class="badge badge-light">0</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-star"></i> Importante <span class="badge badge-light">0</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-folder-open"></i> Organizar depois <span class="badge badge-light">0</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-chart-line"></i> Estudo de investimento <span class="badge badge-light">0</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-vr-cardboard"></i> Projeto realidade aumentada <span class="badge badge-light">0</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-briefcase"></i> Trabalho Temporário <span class="badge badge-light">0</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <button class="btn btn-secondary mb-3" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+                <h2>Bookmarks</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Buscar bookmark...">
+                </div>
+                <button class="btn btn-success mb-3" data-toggle="modal" data-target="#addModal"><i class="fas fa-plus"></i> Adicionar Bookmark</button>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped table-hover fade-in" id="bookmarksTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">URL</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Linhas da tabela serão preenchidas dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Adicionar Bookmark</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addForm">
+                        <div class="form-group">
+                            <label for="newBookmarkName">Nome</label>
+                            <input type="text" class="form-control" id="newBookmarkName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newBookmarkURL">URL</label>
+                            <input type="url" class="form-control" id="newBookmarkURL" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookmarkCategory">Categoria</label>
+                            <select class="form-control" id="bookmarkCategory" required>
+                                <option value="Sites">Sites</option>
+                                <option value="Programação">Programação</option>
+                                <option value="Importante">Importante</option>
+                                <option value="Organizar depois">Organizar depois</option>
+                                <option value="Estudo de investimento">Estudo de investimento</option>
+                                <option value="Projeto realidade aumentada">Projeto realidade aumentada</option>
+                                <option value="Trabalho Temporário">Trabalho Temporário</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="addBookmark()">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar Bookmark</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="form-group">
+                            <label for="bookmarkName">Nome</label>
+                            <input type="text" class="form-control" id="bookmarkName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookmarkURL">URL</label>
+                            <input type="url" class="form-control" id="bookmarkURL" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveChanges()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Excluir Bookmark</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza de que deseja excluir este bookmark?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteBookmark()">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toastNotification">
+        <div class="toast-body">
+            Ação realizada com sucesso!
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+        let currentEditId = null;
+        let currentDeleteId = null;
+
+        // Função para mostrar notificações
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            toast.querySelector('.toast-body').innerText = message;
+            $(toast).toast({ delay: 2000 });
+            $(toast).toast('show');
+        }
+
+        // Função para atualizar contadores de categorias
+        function updateCategoryCounters() {
+            const categories = document.querySelectorAll('#categoryList .nav-item');
+            categories.forEach(category => {
+                const categoryName = category.querySelector('.nav-link').innerText.trim();
+                const count = document.querySelectorAll(`#bookmarksTable tbody tr[data-category="${categoryName}"]`).length;
+                category.querySelector('.badge').innerText = count;
+            });
+        }
+
+        // Função para carregar bookmarks do backend
+        async function loadBookmarks() {
+            try {
+                const response = await fetch('/favorito/list');
+                const bookmarks = await response.json();
+                const table = document.querySelector('#bookmarksTable tbody');
+                table.innerHTML = '';
+                bookmarks.forEach((bookmark, index) => {
+                    const newRow = document.createElement('tr');
+                    newRow.setAttribute('data-category', bookmark.category);
+                    newRow.innerHTML = `
+                        <th scope="row">${index + 1}</th>
+                        <td>${bookmark.name}</td>
+                        <td><a href="${bookmark.url}" target="_blank">${bookmark.url}</a></td>
+                        <td>
+                            <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#editModal" onclick="setEditModal(${index + 1}, '${bookmark.name}', '${bookmark.url}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="setDeleteModal(${index + 1})"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    `;
+                    table.appendChild(newRow);
+                });
+                updateCategoryCounters();
+            } catch (error) {
+                console.error('Erro ao carregar favoritos:', error);
+            }
+        }
+
+        // Função para salvar bookmarks no backend
+        async function saveBookmark(bookmark, isEdit = false) {
+            const url = isEdit ? `/favorito/edit/${bookmark.id}` : '/favorito/add';
+            const method = isEdit ? 'PUT' : 'POST';
+            try {
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookmark)
+                });
+                if (!response.ok) throw new Error('Erro ao salvar favorito');
+                loadBookmarks();
+                showToast('Bookmark salvo com sucesso!');
+            } catch (error) {
+                console.error('Erro ao salvar favorito:', error);
+                showToast('Erro ao salvar favorito');
+            }
+        }
+
+        function setEditModal(id, name, url) {
+            currentEditId = id;
+            document.getElementById('bookmarkName').value = name;
+            document.getElementById('bookmarkURL').value = url;
+        }
+
+        async function saveChanges() {
+            const name = document.getElementById('bookmarkName').value;
+            const url = document.getElementById('bookmarkURL').value;
+            const bookmarks = await fetch('/favorito/list').then(res => res.json());
+            const bookmark = bookmarks.find((b, index) => index + 1 === currentEditId);
+            bookmark.name = name;
+            bookmark.url = url;
+            saveBookmark(bookmark, true);
+            $('#editModal').modal('hide');
+        }
+
+        function setDeleteModal(id) {
+            currentDeleteId = id;
+        }
+
+        async function deleteBookmark() {
+            try {
+                const response = await fetch(`/favorito/remove`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: currentDeleteId })
+                });
+                if (!response.ok) throw new Error('Erro ao excluir favorito');
+                loadBookmarks();
+                $('#deleteModal').modal('hide');
+                showToast('Bookmark excluído com sucesso!');
+            } catch (error) {
+                console.error('Erro ao excluir favorito:', error);
+                showToast('Erro ao excluir favorito');
+            }
+        }
+
+        async function addBookmark() {
+            const name = document.getElementById('newBookmarkName').value;
+            const url = document.getElementById('newBookmarkURL').value;
+            const category = document.getElementById('bookmarkCategory').value;
+            const bookmarks = await fetch('/favorito/list').then(res => res.json());
+            bookmarks.push({ name, url, category });
+            saveBookmark({ name, url, category });
+            $('#addModal').modal('hide');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#bookmarksTable tbody tr');
+            rows.forEach(row => {
+                const name = row.children[1].innerText.toLowerCase();
+                const url = row.children[2].children[0].innerText.toLowerCase();
+                if (name.includes(filter) || url.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('toggleSidebar').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('sidebar-collapsed');
+        });
+
+        document.addEventListener('DOMContentLoaded', loadBookmarks);
+    </script>
+</body>
+
+{% endblock %}
