@@ -7,34 +7,33 @@ from repositories.usuario_repo import UsuarioRepo
 from util.cookies import NOME_COOKIE_AUTH, adicionar_cookie_auth
 
 
-async def obter_cliente_logado(request: Request) -> Optional[Usuario]:
+async def obter_usuario_logado(request: Request) -> Optional[Usuario]:
     try:
         token = request.cookies[NOME_COOKIE_AUTH]
         if token.strip() == "":
             return None
-        cliente = UsuarioRepo.obter_por_token(token)
-        return cliente
+        usuario = UsuarioRepo.obter_por_token(token)
+        return usuario
     except KeyError:
         return None
 
 
 async def middleware_autenticacao(request: Request, call_next):
-    cliente = await obter_cliente_logado(request)
-    request.state.cliente = cliente
+    usuario = await obter_usuario_logado(request)
+    request.state.usuario = usuario
     response = await call_next(request)
     if response.status_code == status.HTTP_303_SEE_OTHER:
         return response
-    if cliente:
+    if usuario:
         token = request.cookies[NOME_COOKIE_AUTH]
         adicionar_cookie_auth(response, token)
     return response
 
 
 async def checar_permissao(request: Request):
-    cliente = request.state.cliente if hasattr(request.state, "cliente") else None
-    area_do_cliente = request.url.path.startswith("/cliente")
-    area_do_admin = request.url.path.startswith("/admin")
-    if (area_do_cliente or area_do_admin) and not cliente:
+    usuario = request.state.usuario if hasattr(request.state, "usuario") else None
+    area_do_usuario = request.url.path.startswith("/favoritos")
+    if (area_do_usuario) and not usuario:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     # if area_do_cliente and cliente.perfil != 1:
     #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
