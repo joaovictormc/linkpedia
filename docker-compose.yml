@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   web:
-    container_name: lojavirtual.cachoeiro.es
+    container_name: linkpedia.cachoeiro.es
     build: .
     ports:
-      - "8070:8000"
+      - "8068:8000"
