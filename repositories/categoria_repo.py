@@ -1,3 +1,4 @@
+import json
 import sqlite3
 from typing import List, Optional
 from models.categoria_model import Categoria
@@ -86,3 +87,11 @@ class CategoriaRepo:
         except sqlite3.Error as ex:
             print(ex)
             return None
+        
+    @classmethod
+    def inserir_categoria_json(cls, arquivo_json: str):
+        if CategoriaRepo.obter_quantidade() == 0:
+            with open(arquivo_json, "r", encoding="utf-8") as arquivo:
+                categorias = json.load(arquivo)
+                for categoria in categorias:
+                    CategoriaRepo.inserir(Categoria(**categoria))

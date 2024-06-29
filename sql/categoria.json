@@ -1,0 +1,18 @@
+[
+    {
+        "nome": "Tecnologia",
+        "icone": "fa-laptop"
+    },
+    {
+        "nome": "Esportes",
+        "icone": "fa-futbol-o"
+    },
+    {
+        "nome": "Moda",
+        "icone": "fa-shopping-bag"
+    },
+    {
+        "nome": "Viagem",
+        "icone": "fa-plane"
+    }
+]

@@ -1,6 +1,7 @@
 from fastapi import Depends, FastAPI
 from fastapi.staticfiles import StaticFiles
 
+from repositories.categoria_repo import CategoriaRepo
 from repositories.favorito_repo import FavoritoRepo
 from repositories.usuario_repo import UsuarioRepo
 from routes import main_routes, favorito_routes
@@ -11,7 +12,8 @@ from util.exceptions import configurar_excecoes
 from routes import main_routes
 
 FavoritoRepo.criar_tabela()
-
+CategoriaRepo.criar_tabela()
+CategoriaRepo.inserir_categorias_json("sql/categoria.json")
 UsuarioRepo.criar_tabela()
 UsuarioRepo.inserir_usuarios_json("sql/usuarios.json")
 
