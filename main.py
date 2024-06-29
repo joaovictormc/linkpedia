@@ -13,7 +13,7 @@ from routes import main_routes
 
 FavoritoRepo.criar_tabela()
 CategoriaRepo.criar_tabela()
-CategoriaRepo.inserir_categorias_json("sql/categoria.json")
+CategoriaRepo.inserir_categoria_json("sql/categoria.json")
 UsuarioRepo.criar_tabela()
 UsuarioRepo.inserir_usuarios_json("sql/usuarios.json")
 

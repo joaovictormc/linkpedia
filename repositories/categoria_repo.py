@@ -89,6 +89,17 @@ class CategoriaRepo:
             return None
         
     @classmethod
+    def obter_quantidade(cls) -> Optional[int]:
+        try:
+            with obter_conexao() as conexao:
+                cursor = conexao.cursor()
+                tupla = cursor.execute(SQL_OBTER_QUANTIDADE).fetchone()
+                return int(tupla[0])
+        except sqlite3.Error as ex:
+            print(ex)
+            return None
+
+    @classmethod
     def inserir_categoria_json(cls, arquivo_json: str):
         if CategoriaRepo.obter_quantidade() == 0:
             with open(arquivo_json, "r", encoding="utf-8") as arquivo:

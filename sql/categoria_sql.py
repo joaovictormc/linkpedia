@@ -1,6 +1,6 @@
 SQL_CRIAR_TABELA = """
     CREATE TABLE IF NOT EXISTS categoria (
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
         icone TEXT
     )
@@ -39,4 +39,8 @@ SQL_OBTER_BUSCA = """
     FROM categoria
     WHERE nome LIKE ?
     ORDER BY nome
+"""
+
+SQL_OBTER_QUANTIDADE = """"
+    SELECT COUNT(*) FROM categoria
 """
