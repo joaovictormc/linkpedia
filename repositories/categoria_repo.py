@@ -1,5 +1,4 @@
 import sqlite3
-import json
 from typing import List, Optional
 from models.categoria_model import Categoria
 from sql.categoria_sql import *
@@ -14,7 +13,6 @@ class CategoriaRepo:
             cursor = conexao.cursor()
             cursor.execute(SQL_CRIAR_TABELA)
 
-
     @classmethod
     def inserir(cls, categoria: Categoria) -> Optional[Categoria]:
         try:
@@ -24,9 +22,7 @@ class CategoriaRepo:
                     SQL_INSERIR,
                     (
                         categoria.nome,
-                        categoria.data_nascimento,
-                        categoria.email,
-                        categoria.senha,
+                        categoria.icone,
                     ),
                 )
                 if cursor.rowcount > 0:
@@ -35,7 +31,6 @@ class CategoriaRepo:
         except sqlite3.Error as ex:
             print(ex)
             return None
-        
 
     @classmethod
     def alterar(cls, categoria: Categoria) -> bool:
@@ -46,8 +41,7 @@ class CategoriaRepo:
                     SQL_ALTERAR,
                     (
                         categoria.nome,
-                        categoria.data_nascimento,
-                        categoria.email,
+                        categoria.icone,
                         categoria.id,
                     ),
                 )
@@ -55,7 +49,6 @@ class CategoriaRepo:
         except sqlite3.Error as ex:
             print(ex)
             return False
-        
 
     @classmethod
     def excluir(cls, id: int) -> bool:
@@ -67,24 +60,6 @@ class CategoriaRepo:
         except sqlite3.Error as ex:
             print(ex)
             return False
-        
-
-    @classmethod
-    def obter_busca(cls, termo: str, pagina: int, tamanho_pagina: int) -> List[Categoria]:
-        termo = "%" + termo + "%"
-        offset = (pagina - 1) * tamanho_pagina
-        try:
-            with obter_conexao() as conexao:
-                cursor = conexao.cursor()
-                tuplas = cursor.execute(
-                    SQL_OBTER_BUSCA, (termo, termo, tamanho_pagina, offset)
-                ).fetchall()
-                categoria = [Categoria(*t) for t in tuplas]
-                return categoria
-        except sqlite3.Error as ex:
-            print(ex)
-            return None
-        
 
     @classmethod
     def obter_todos(cls) -> List[Categoria]:
@@ -92,12 +67,11 @@ class CategoriaRepo:
             with obter_conexao() as conexao:
                 cursor = conexao.cursor()
                 tuplas = cursor.execute(SQL_OBTER_TODOS).fetchall()
-                categoria = [Categoria(*t) for t in tuplas]
-                return categoria
+                categorias = [Categoria(*t) for t in tuplas]
+                return categorias
         except sqlite3.Error as ex:
             print(ex)
             return None
-        
 
     @classmethod
     def obter_por_id(cls, id: int) -> Optional[Categoria]:
