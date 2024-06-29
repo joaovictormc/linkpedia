@@ -1,47 +1,72 @@
 {% extends "pages/base.html" %}
 {% block subtitulo %}Favoritos{% endblock %}
 {% block topo %}
+<!-- Adicionando o link para os ícones do Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <style>
     body {
-        background-color: #2b2b2b;
-        color: white;
+        background-color: #1e1e2e;
+        color: #f8f8f2;
         overflow-x: hidden;
         font-family: 'Roboto', sans-serif;
     }
 
     .sidebar {
         height: 100vh;
-        background-color: #333;
+        background-color: #282a36;
         padding-top: 20px;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, width 0.3s ease;
+        width: 350px;
+        position: fixed;
+        z-index: 1000;
     }
 
     .sidebar-collapsed {
-        transform: translateX(-100%);
+        transform: translateX(-350px);
     }
 
     .sidebar .nav-link {
-        color: white;
+        color: #f8f8f2;
         transition: background-color 0.3s ease;
     }
 
-    .sidebar .nav-link:hover {
-        background-color: #444;
+    .sidebar .nav-link:hover, .sidebar .nav-link:focus {
+        background-color: #6a0dad;
+    }
+
+    .sidebar .nav-link.active {
+        background-color: #4b0082;
+    }
+
+    .sidebar .nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+    }
+
+    .sidebar .btn-group {
+        display: none;
+        gap: 5px;
+    }
+
+    .sidebar .nav-item:hover .btn-group {
+        display: flex;
     }
 
     .table thead th {
-        border-bottom: 2px solid #444;
+        border-bottom: 2px solid #6a0dad;
     }
 
     .table tbody tr {
-        border-bottom: 1px solid #444;
+        border-bottom: 1px solid #6a0dad;
     }
 
     .table-dark th,
     .table-dark td,
     .table-dark thead th {
-        border-color: #444;
+        border-color: #6a0dad;
     }
 
     .search-bar {
@@ -67,83 +92,246 @@
         top: 20px;
         right: 20px;
         z-index: 1060;
-        background-color: #444;
-        color: white;
+        background-color: #44475a;
+        color: #f8f8f2;
+        border-radius: 5px;
+        padding: 10px 15px;
     }
 
-    .nav-item {
-        position: relative;
-    }
-
-    .nav-item .badge {
-        position: absolute;
-        top: 10px;
-        right: 20px;
-        background-color: #ff0000;
-        color: white;
+    .badge {
+        background-color: #bd93f9;
+        color: #1e1e2e;
+        border-radius: 12px;
+        padding: 5px 10px;
     }
 
     .modal-content {
         font-family: 'Roboto', sans-serif;
+        background-color: #282a36;
+        color: #f8f8f2;
+        border: 1px solid #6a0dad;
+        border-radius: 10px;
     }
 
     .new-bookmark {
-        color: black;
+        color: #f8f8f2;
         margin-top: 10px;
     }
 
-    .modal-header{
+    .modal-header {
         display: flex;
         align-items: center;
+        border-bottom: 1px solid #6a0dad;
     }
 
-    .modal-title{
-        color: black;
+    .modal-title {
+        color: #f8f8f2;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #6a0dad;
+    }
+
+    main {
+        margin-left: 350px;
+        transition: margin-left 0.3s ease;
+    }
+
+    .sidebar-collapsed + main {
+        margin-left: 0;
+    }
+
+    .top-bar {
+        width: calc(100% - 350px);
+        background-color: #282a36;
+        color: #f8f8f2;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        z-index: 1000;
+        left: 350px;
+        transition: left 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar-collapsed + .top-bar {
+        left: 0;
+        width: 100%;
+    }
+
+    .top-bar .btn {
+        color: #f8f8f2;
+        font-size: 1.2rem;
+        padding: 0.5rem 1rem;
+        margin-left: 10px;
+        background-color: #6a0dad;
+        border: 2px solid #6a0dad;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        cursor: pointer;
+    }
+
+    .top-bar .btn:hover, .top-bar .btn:focus, .top-bar .btn:active {
+        background-color: #4b0082;
+        border-color: #4b0082;
+    }
+
+    .top-bar .btn-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .content {
+        padding-top: 80px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .btn-primary {
+        background-color: #6a0dad;
+        border-color: #6a0dad;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+        background-color: #4b0082;
+        border-color: #4b0082;
+    }
+
+    .btn-secondary {
+        background-color: #44475a;
+        border-color: #6a0dad;
+        cursor: pointer;
+    }
+
+    .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
+        background-color: #6a0dad;
+        border-color: #4b0082;
+    }
+
+    .btn-danger {
+        background-color: #ff5555;
+        border-color: #6a0dad;
+        cursor: pointer;
+    }
+
+    .btn-danger:hover, .btn-danger:focus, .btn-danger:active {
+        background-color: #6a0dad;
+        border-color: #ff5555;
+    }
+
+    .btn-info {
+        background-color: #6a0dad;
+        border-color: #6a0dad;
+        cursor: pointer;
+    }
+
+    .btn-info:hover, .btn-info:focus, .btn-info:active {
+        background-color: #4b0082;
+        border-color: #4b0082;
+    }
+
+    .btn-light {
+        background-color: #bd93f9;
+        border-color: #bd93f9;
+        cursor: pointer;
+    }
+
+    .btn-light:hover, .btn-light:focus, .btn-light:active {
+        background-color: #6a0dad;
+        border-color: #6a0dad;
+    }
+
+    .btn:focus, .btn:active {
+        outline: none;
+        box-shadow: none;
     }
 </style>
 </head>
 
 <body>
     <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-2 d-none d-md-block sidebar sidebar-collapsed" id="sidebar">
-                <div class="sidebar-sticky">
-                    <h5 class="px-3">Barra de Favoritos</h5>
-                    <ul class="nav flex-column" id="categoryList">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#"><i class="fas fa-folder"></i> Sites <span class="badge badge-light">0</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-code"></i> Programação <span class="badge badge-light">0</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-star"></i> Importante <span class="badge badge-light">0</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-folder-open"></i> Organizar depois <span class="badge badge-light">0</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-chart-line"></i> Estudo de investimento <span class="badge badge-light">0</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-vr-cardboard"></i> Projeto realidade aumentada <span class="badge badge-light">0</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-briefcase"></i> Trabalho Temporário <span class="badge badge-light">0</span></a>
-                        </li>
-                    </ul>
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar" id="sidebar">
+            <div class="sidebar-sticky">
+                <div class="d-flex justify-content-between align-items-center px-3 mb-3">
+                    <h5>Barra de Favoritos</h5>
+                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addCategoryModal"><i class="fas fa-plus"></i></button>
                 </div>
-            </nav>
+                <ul class="nav flex-column" id="categoryList">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-folder"></i> Sites <span class="badge badge-light">0</span></a>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-info" onclick="editCategory('Sites')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Sites')"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-code"></i> Programação <span class="badge badge-light">0</span></a>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-info" onclick="editCategory('Programação')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Programação')"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-star"></i> Importante <span class="badge badge-light">0</span></a>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-info" onclick="editCategory('Importante')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Importante')"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-folder-open"></i> Organizar depois <span class="badge badge-light">0</span></a>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-info" onclick="editCategory('Organizar depois')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Organizar depois')"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-chart-line"></i> Estudo de investimento <span class="badge badge-light">0</span></a>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-info" onclick="editCategory('Estudo de investimento')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Estudo de investimento')"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-vr-cardboard"></i> Projeto realidade aumentada <span class="badge badge-light">0</span></a>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-info" onclick="editCategory('Projeto realidade aumentada')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Projeto realidade aumentada')"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-briefcase"></i> Trabalho Temporário <span class="badge badge-light">0</span></a>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-info" onclick="editCategory('Trabalho Temporário')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Trabalho Temporário')"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-            <!-- Main content -->
+        <!-- Top bar -->
+        <div class="top-bar" id="topBar">
+            <button class="btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+            <div class="btn-group">
+                <button class="btn" id="profileBtn"><i class="fas fa-user"></i> Perfil</button>
+                <button class="btn" id="aboutBtn"><i class="fas fa-info-circle"></i> Sobre</button>
+                <button class="btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="row content">
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <button class="btn btn-secondary mb-3" id="toggleSidebar"><i class="fas fa-bars"></i></button>
                 <h2>Bookmarks</h2>
                 <div class="search-bar">
                     <input type="text" id="searchInput" class="form-control" placeholder="Buscar bookmark...">
                 </div>
-                <button class="btn btn-success mb-3" data-toggle="modal" data-target="#addModal"><i class="fas fa-plus"></i> Adicionar Bookmark</button>
+                <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addModal"><i class="fas fa-plus"></i> Adicionar Bookmark</button>
                 <div class="table-responsive">
                     <table class="table table-dark table-striped table-hover fade-in" id="bookmarksTable">
                         <thead>
@@ -170,8 +358,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="addModalLabel">Adicionar Bookmark</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                        <span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <form id="addForm">
@@ -205,6 +392,66 @@
         </div>
     </div>
 
+    <!-- Add Category Modal -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModalLabel">Adicionar Categoria</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCategoryForm">
+                        <div class="form-group">
+                            <label class="new-bookmark" for="newCategoryName">Nome da Categoria</label>
+                            <input type="text" class="form-control" id="newCategoryName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="new-bookmark" for="newCategoryIcon">Ícone da Categoria</label>
+                            <input type="text" class="form-control" id="newCategoryIcon" placeholder="fa-folder" required>
+                            <small class="form-text text-muted">Use qualquer ícone da Font Awesome, ex: fa-folder</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="addCategory()">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Category Modal -->
+    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCategoryModalLabel">Editar Categoria</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCategoryForm">
+                        <div class="form-group">
+                            <label class="new-bookmark" for="editCategoryName">Nome da Categoria</label>
+                            <input type="text" class="form-control" id="editCategoryName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="new-bookmark" for="editCategoryIcon">Ícone da Categoria</label>
+                            <input type="text" class="form-control" id="editCategoryIcon" required>
+                            <small class="form-text text-muted">Use qualquer ícone da Font Awesome, ex: fa-folder</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveCategoryChanges()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Edit Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -212,8 +459,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">Editar Bookmark</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                        <span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <form id="editForm">
@@ -242,8 +488,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">Excluir Bookmark</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                        <span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     Tem certeza de que deseja excluir este bookmark?
@@ -270,6 +515,7 @@
     <script>
         let currentEditId = null;
         let currentDeleteId = null;
+        let currentEditCategoryId = null;
 
         // Função para mostrar notificações
         function showToast(message) {
@@ -304,8 +550,8 @@
                         <td>${bookmark.name}</td>
                         <td><a href="${bookmark.url}" target="_blank">${bookmark.url}</a></td>
                         <td>
-                            <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#editModal" onclick="setEditModal(${index + 1}, '${bookmark.name}', '${bookmark.url}')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="setDeleteModal(${index + 1})"><i class="fas fa-trash-alt"></i></button>
+                            <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#editModal" onclick="setEditModal(${bookmark.id}, '${bookmark.name}', '${bookmark.url}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="setDeleteModal(${bookmark.id})"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     `;
                     table.appendChild(newRow);
@@ -346,10 +592,7 @@
         async function saveChanges() {
             const name = document.getElementById('bookmarkName').value;
             const url = document.getElementById('bookmarkURL').value;
-            const bookmarks = await fetch('/favorito/list').then(res => res.json());
-            const bookmark = bookmarks.find((b, index) => index + 1 === currentEditId);
-            bookmark.name = name;
-            bookmark.url = url;
+            const bookmark = { id: currentEditId, name, url };
             saveBookmark(bookmark, true);
             $('#editModal').modal('hide');
         }
@@ -381,10 +624,50 @@
             const name = document.getElementById('newBookmarkName').value;
             const url = document.getElementById('newBookmarkURL').value;
             const category = document.getElementById('bookmarkCategory').value;
-            const bookmarks = await fetch('/favorito/list').then(res => res.json());
-            bookmarks.push({ name, url, category });
-            saveBookmark({ name, url, category });
+            const bookmark = { name, url, category };
+            saveBookmark(bookmark);
             $('#addModal').modal('hide');
+        }
+
+        async function addCategory() {
+            const name = document.getElementById('newCategoryName').value;
+            const icon = document.getElementById('newCategoryIcon').value;
+            const categoryList = document.getElementById('categoryList');
+
+            const newItem = document.createElement('li');
+            newItem.className = 'nav-item';
+            newItem.innerHTML = `
+                <a class="nav-link" href="#"><i class="fas ${icon}"></i> ${name} <span class="badge badge-light">0</span></a>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-info" onclick="editCategory('${name}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteCategory('${name}')"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `;
+            categoryList.appendChild(newItem);
+            $('#addCategoryModal').modal('hide');
+        }
+
+        async function editCategory(name) {
+            const category = [...document.querySelectorAll('#categoryList .nav-item')].find(item => item.querySelector('.nav-link').innerText.includes(name));
+            const icon = category.querySelector('.nav-link i').classList[1];
+
+            document.getElementById('editCategoryName').value = name;
+            document.getElementById('editCategoryIcon').value = icon;
+
+            currentEditCategoryId = name;
+            $('#editCategoryModal').modal('show');
+        }
+
+        async function saveCategoryChanges() {
+            const name = document.getElementById('editCategoryName').value;
+            const icon = document.getElementById('editCategoryIcon').value;
+
+            const category = [...document.querySelectorAll('#categoryList .nav-item')].find(item => item.querySelector('.nav-link').innerText.includes(currentEditCategoryId));
+            category.querySelector('.nav-link').innerHTML = `<i class="fas ${icon}"></i> ${name} <span class="badge badge-light">0</span>`;
+
+            $('#editCategoryModal').modal('hide');
+            showToast('Categoria editada com sucesso!');
+            updateCategoryCounters();
         }
 
         document.getElementById('searchInput').addEventListener('input', function () {
@@ -402,7 +685,19 @@
         });
 
         document.getElementById('toggleSidebar').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('sidebar-collapsed');
+            const sidebar = document.getElementById('sidebar');
+            const main = document.querySelector('main');
+            const topBar = document.getElementById('topBar');
+            sidebar.classList.toggle('sidebar-collapsed');
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                main.style.marginLeft = '0';
+                topBar.style.left = '0';
+                topBar.style.width = '100%';
+            } else {
+                main.style.marginLeft = '350px';
+                topBar.style.left = '350px';
+                topBar.style.width = 'calc(100% - 350px)';
+            }
         });
 
         document.addEventListener('DOMContentLoaded', loadBookmarks);
