@@ -120,3 +120,13 @@ async def list_categorias(request: Request):
             content={"message": f"Erro ao listar categorias: {str(e)}"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
+    
+
+@router.get("/sobre", response_class=HTMLResponse)
+async def get_sobre(request: Request):
+    return templates.TemplateResponse(
+        "sobre.html",
+        {
+            "request": request
+        },
+    )

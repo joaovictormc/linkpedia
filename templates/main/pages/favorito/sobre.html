@@ -1,0 +1,81 @@
+<!-- templates/favorito/sobre.html -->
+{% extends "pages/base.html" %}
+
+{% block subtitulo %}Sobre Nós{% endblock %}
+
+{% block topo %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #1e1e2e;
+        color: #ffffff;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #282a36;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    h1, h2 {
+        color: #ff79c6;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin: 10px 0;
+    }
+
+    .tech-icon {
+        margin-right: 10px;
+        color: #ff79c6;
+    }
+
+    a {
+        color: #ff79c6;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-center">Sobre o Projeto</h1>
+    <p>Este projeto foi realizado por Alessandro Carvalho Santos e João Victor Maciel Campos.</p>
+    <p>O projeto foi desenvolvido como parte da disciplina de Desenvolvimento Web ministrada pelo professor Ricardo Maróquio.</p>
+    <h2>Tecnologias e Bibliotecas Utilizadas</h2>
+    <ul class="list-unstyled">
+        <li><i class="fab fa-python tech-icon"></i>Python</li>
+        <li><i class="fab fa-html5 tech-icon"></i>HTML</li>
+        <li><i class="fab fa-css3-alt tech-icon"></i>CSS</li>
+        <li><i class="fab fa-bootstrap tech-icon"></i>Bootstrap</li>
+        <li><i class="fas fa-rocket tech-icon"></i>FastAPI</li>
+        <li><i class="fas fa-server tech-icon"></i>Uvicorn</li>
+        <li><i class="fas fa-terminal tech-icon"></i>Httpie</li>
+        <li><i class="fas fa-network-wired tech-icon"></i>Requests</li>
+        <li><i class="fas fa-exchange-alt tech-icon"></i>Httpx</li>
+        <li><i class="fas fa-code tech-icon"></i>Jinja2</li>
+        <li><i class="fas fa-file-upload tech-icon"></i>Python-Multipart</li>
+        <li><i class="fas fa-image tech-icon"></i>Pillow</li>
+        <li><i class="fas fa-lock tech-icon"></i>Bcrypt</li>
+        <li><i class="fas fa-cogs tech-icon"></i>Python-Dotenv</li>
+    </ul>
+    <p class="text-center mt-4">
+        <a href="https://github.com/joaovictormc/linkpedia" target="_blank">
+            <i class="fab fa-github tech-icon"></i>Repositório do Projeto no GitHub
+        </a>
+    </p>
+</div>
+{% endblock %}
