@@ -41,6 +41,6 @@ SQL_OBTER_BUSCA = """
     ORDER BY nome
 """
 
-SQL_OBTER_QUANTIDADE = """"
+SQL_OBTER_QUANTIDADE = """
     SELECT COUNT(*) FROM categoria
 """

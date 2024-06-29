@@ -261,55 +261,7 @@
                     <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addCategoryModal"><i class="fas fa-plus"></i></button>
                 </div>
                 <ul class="nav flex-column" id="categoryList">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="fas fa-folder"></i> Sites <span class="badge badge-light">0</span></a>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-info" onclick="editCategory('Sites')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Sites')"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-code"></i> Programação <span class="badge badge-light">0</span></a>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-info" onclick="editCategory('Programação')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Programação')"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-star"></i> Importante <span class="badge badge-light">0</span></a>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-info" onclick="editCategory('Importante')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Importante')"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-folder-open"></i> Organizar depois <span class="badge badge-light">0</span></a>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-info" onclick="editCategory('Organizar depois')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Organizar depois')"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-chart-line"></i> Estudo de investimento <span class="badge badge-light">0</span></a>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-info" onclick="editCategory('Estudo de investimento')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Estudo de investimento')"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-vr-cardboard"></i> Projeto realidade aumentada <span class="badge badge-light">0</span></a>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-info" onclick="editCategory('Projeto realidade aumentada')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Projeto realidade aumentada')"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-briefcase"></i> Trabalho Temporário <span class="badge badge-light">0</span></a>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-info" onclick="editCategory('Trabalho Temporário')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('Trabalho Temporário')"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </li>
+                    <!-- As categorias serão carregadas dinamicamente -->
                 </ul>
             </div>
         </nav>
@@ -373,13 +325,7 @@
                         <div class="form-group">
                             <label class="new-bookmark" for="bookmarkCategory">Categoria</label>
                             <select class="form-control" id="bookmarkCategory" required>
-                                <option value="Sites">Sites</option>
-                                <option value="Programação">Programação</option>
-                                <option value="Importante">Importante</option>
-                                <option value="Organizar depois">Organizar depois</option>
-                                <option value="Estudo de investimento">Estudo de investimento</option>
-                                <option value="Projeto realidade aumentada">Projeto realidade aumentada</option>
-                                <option value="Trabalho Temporário">Trabalho Temporário</option>
+                                <!-- As opções serão carregadas dinamicamente -->
                             </select>
                         </div>
                     </form>
@@ -535,6 +481,38 @@
             });
         }
 
+        // Função para carregar categorias do backend
+        async function loadCategories() {
+            try {
+                const response = await fetch('favorito/categoria/list');
+                const categories = await response.json();
+                const categoryList = document.getElementById('categoryList');
+                const bookmarkCategorySelect = document.getElementById('bookmarkCategory');
+                categoryList.innerHTML = '';
+                bookmarkCategorySelect.innerHTML = '';
+                categories.forEach(category => {
+                    const newItem = document.createElement('li');
+                    newItem.className = 'nav-item';
+                    newItem.innerHTML = `
+                        <a class="nav-link" href="#"><i class="fas ${category.icone}"></i> ${category.nome} <span class="badge badge-light">0</span></a>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-info" onclick="editCategory(${category.id}, '${category.nome}', '${category.icone}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCategory(${category.id})"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    `;
+                    categoryList.appendChild(newItem);
+
+                    const newOption = document.createElement('option');
+                    newOption.value = category.nome;
+                    newOption.innerText = category.nome;
+                    bookmarkCategorySelect.appendChild(newOption);
+                });
+                updateCategoryCounters();
+            } catch (error) {
+                console.error('Erro ao carregar categorias:', error);
+            }
+        }
+
         // Função para carregar bookmarks do backend
         async function loadBookmarks() {
             try {
@@ -630,44 +608,71 @@
         }
 
         async function addCategory() {
-            const name = document.getElementById('newCategoryName').value;
-            const icon = document.getElementById('newCategoryIcon').value;
-            const categoryList = document.getElementById('categoryList');
-
-            const newItem = document.createElement('li');
-            newItem.className = 'nav-item';
-            newItem.innerHTML = `
-                <a class="nav-link" href="#"><i class="fas ${icon}"></i> ${name} <span class="badge badge-light">0</span></a>
-                <div class="btn-group">
-                    <button class="btn btn-sm btn-info" onclick="editCategory('${name}')"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteCategory('${name}')"><i class="fas fa-trash-alt"></i></button>
-                </div>
-            `;
-            categoryList.appendChild(newItem);
+            const nome = document.getElementById('newCategoryName').value;
+            const icone = document.getElementById('newCategoryIcon').value;
+            try {
+                const response = await fetch('/categoria/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nome, icone })
+                });
+                if (!response.ok) throw new Error('Erro ao adicionar categoria');
+                loadCategories();
+                showToast('Categoria adicionada com sucesso!');
+            } catch (error) {
+                console.error('Erro ao adicionar categoria:', error);
+                showToast('Erro ao adicionar categoria');
+            }
             $('#addCategoryModal').modal('hide');
         }
 
-        async function editCategory(name) {
-            const category = [...document.querySelectorAll('#categoryList .nav-item')].find(item => item.querySelector('.nav-link').innerText.includes(name));
-            const icon = category.querySelector('.nav-link i').classList[1];
-
-            document.getElementById('editCategoryName').value = name;
-            document.getElementById('editCategoryIcon').value = icon;
-
-            currentEditCategoryId = name;
+        async function editCategory(id, nome, icone) {
+            currentEditCategoryId = id;
+            document.getElementById('editCategoryName').value = nome;
+            document.getElementById('editCategoryIcon').value = icone;
             $('#editCategoryModal').modal('show');
         }
 
         async function saveCategoryChanges() {
-            const name = document.getElementById('editCategoryName').value;
-            const icon = document.getElementById('editCategoryIcon').value;
-
-            const category = [...document.querySelectorAll('#categoryList .nav-item')].find(item => item.querySelector('.nav-link').innerText.includes(currentEditCategoryId));
-            category.querySelector('.nav-link').innerHTML = `<i class="fas ${icon}"></i> ${name} <span class="badge badge-light">0</span>`;
-
+            const nome = document.getElementById('editCategoryName').value;
+            const icone = document.getElementById('editCategoryIcon').value;
+            const formData = new FormData();
+            formData.append('id', currentEditCategoryId);
+            formData.append('nome', nome);
+            formData.append('icone', icone);
+        
+            try {
+                const response = await fetch(`favorito/categoria/update`, {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) throw new Error('Erro ao editar categoria');
+                loadCategories();
+                showToast('Categoria editada com sucesso!');
+            } catch (error) {
+                console.error('Erro ao editar categoria:', error);
+                showToast('Erro ao editar categoria');
+            }
             $('#editCategoryModal').modal('hide');
-            showToast('Categoria editada com sucesso!');
-            updateCategoryCounters();
+        }
+        
+        async function deleteCategory(id) {
+            try {
+                const response = await fetch(`/categoria/delete/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) throw new Error('Erro ao excluir categoria');
+                loadCategories();
+                showToast('Categoria excluída com sucesso!');
+            } catch (error) {
+                console.error('Erro ao excluir categoria:', error);
+                showToast('Erro ao excluir categoria');
+            }
         }
 
         document.getElementById('searchInput').addEventListener('input', function () {
@@ -700,7 +705,10 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', loadBookmarks);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCategories();
+            loadBookmarks();
+        });
     </script>
 </body>
 

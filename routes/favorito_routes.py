@@ -114,7 +114,9 @@ async def update_categoria(request: Request, id: int = Form(...), nome: str = Fo
 async def list_categorias(request: Request):
     try:
         categorias = CategoriaRepo.obter_todos()
-        return JSONResponse(content=categorias, status_code=status.HTTP_200_OK)
+        categorias_dict = [{"id": cat.id, "nome": cat.nome, "icone": cat.icone} for cat in categorias]
+
+        return JSONResponse(content=categorias_dict, status_code=status.HTTP_200_OK)
     except DatabaseError as e:
         return JSONResponse(
             content={"message": f"Erro ao listar categorias: {str(e)}"},
