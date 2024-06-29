@@ -132,3 +132,17 @@ async def get_sobre(request: Request):
             "request": request
         },
     )
+
+@router.post("/categoria/remover", response_class=JSONResponse)
+async def remover_categoria(request: Request, id: int = Form(...)):
+    try:
+        CategoriaRepo.excluir(id)
+        return JSONResponse(
+            content={"message": "Caregoria removida com sucesso!"},
+            status_code=status.HTTP_200_OK,
+        )
+    except DatabaseError as e:
+        return JSONResponse(
+            content={"message": f"Erro ao remover a categoria: {str(e)}"},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
