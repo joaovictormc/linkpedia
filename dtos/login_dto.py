@@ -6,7 +6,6 @@ from util.validators import *
 class LoginDTO(BaseModel):
     email: str
     senha: str
-    return_url: str
 
     @field_validator("email")
     def validar_email(cls, v):

@@ -26,7 +26,9 @@ class UsuarioRepo:
                         usuario.email, 
                         usuario.senha,
                     ))
-                return cursor.rowcount > 0
+                if cursor.rowcount > 0:
+                    Usuario.id = cursor.lastrowid
+                    return Usuario
         except sqlite3.Error as ex:
             print(ex)
             return False
@@ -103,11 +105,12 @@ class UsuarioRepo:
         try:
             with obter_conexao() as conexao:
                 cursor = conexao.cursor()
-                tupla = cursor.execute(
-                    SQL_OBTER_POR_EMAIL, (email,)).fetchone()
-                if tupla is None:
+                tupla = cursor.execute(SQL_OBTER_POR_EMAIL, (email,)).fetchone()
+                if tupla:
+                    usuario = Usuario(*tupla)
+                    return usuario
+                else:
                     return None
-                return Usuario(*tupla)
         except sqlite3.Error as ex:
             print(ex)
             return None

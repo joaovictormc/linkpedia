@@ -1,0 +1,33 @@
+/* Barra de rolagem geral */
+::-webkit-scrollbar {
+    width: 12px; /* Largura da barra de rolagem */
+    height: 12px; /* Altura da barra de rolagem horizontal */
+}
+
+/* Fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+    background: #f0e7f6; /* Cor de fundo */
+    border-radius: 10px; /* Arredondamento dos cantos */
+}
+
+/* Polegar da barra de rolagem */
+::-webkit-scrollbar-thumb {
+    background: #9D4EDD; /* Cor do polegar */
+    border-radius: 10px; /* Arredondamento dos cantos */
+    border: 2px solid #f0e7f6; /* Cor da borda e espaço ao redor */
+}
+
+/* Polegar da barra de rolagem ao passar o mouse */
+::-webkit-scrollbar-thumb:hover {
+    background: #7B2CBF; /* Cor do polegar ao passar o mouse */
+}
+
+/* Botões de rolagem */
+::-webkit-scrollbar-button {
+    display: none; /* Ocultar botões de rolagem, se necessário */
+}
+
+/* Barra de rolagem horizontal */
+::-webkit-scrollbar-corner {
+    background: #f0e7f6; /* Cor do canto onde as barras de rolagem se encontram */
+}

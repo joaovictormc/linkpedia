@@ -1,6 +1,5 @@
 function initializeJsonForm() {
     var form = document.querySelector('.json-form');
-
     if (form) {
         form.addEventListener('submit', function (event) {
             event.preventDefault(); // Impede o envio padrão do formulário

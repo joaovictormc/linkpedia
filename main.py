@@ -11,6 +11,7 @@ from util.exceptions import configurar_excecoes
 from routes import main_routes
 
 FavoritoRepo.criar_tabela()
+
 UsuarioRepo.criar_tabela()
 UsuarioRepo.inserir_usuarios_json("sql/usuarios.json")
 

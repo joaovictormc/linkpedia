@@ -3,6 +3,9 @@
 {% block subtitulo %} LinkPédia - Cadastro {% endblock %}
 
 {% block topo %}
+<!-- Adicionando o link para os ícones do Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <style>
     .register-container {
         display: flex;
@@ -10,6 +13,8 @@
         justify-content: center;
         min-height: 100vh;
         background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
+        padding: 2rem;
+        box-sizing: border-box;
     }
     .register-card {
         background: #fff;
@@ -53,19 +58,55 @@
         border: 1px solid #ccc;
         border-radius: 5px;
     }
+    .password-container {
+        position: relative;
+        display: block;
+        align-items: center;
+    }
+    .password-container input {
+        width: 100%;
+        padding-right: 2.5rem;
+    }
+    .password-container .toggle-password {
+        position: absolute;
+        right: 10px;
+        display: flex;
+        top: 48px;
+        cursor: pointer;
+        font-size: 1.25rem;
+        color: #666;
+    }
     .register-btn {
         background: #5A189A;
         border: none;
         color: #fff;
-        padding: 0.75rem;
-        width: 100%;
+        padding: 0.75rem 1.5rem;
+        width: 48%;
         border-radius: 5px;
         font-size: 1rem;
         cursor: pointer;
         transition: background 0.3s ease;
+        margin-right: 4%;
+        font-weight:bolder;
+
     }
     .register-btn:hover {
         background: #3C096C;
+    }
+    .back-btn {
+        background: #ccc;
+        border: none;
+        color: #333;
+        padding: 0.75rem 1.5rem;
+        width: 48%;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        font-weight:bolder;
+    }
+    .back-btn:hover {
+        background: #bbb;
     }
     .register-links {
         text-align: center;
@@ -100,35 +141,83 @@
             <h3>Cadastro no LinkPédia</h3>
         </div>
         <div class="register-body mt-3">
-            <form>
+            <form id="register-form" class="json-form" method="post" action="post_cadastro">
                 <div class="register-form-group">
                     <label for="name">Nome</label>
-                    <input type="text" id="name" placeholder="Digite seu nome">
+                    <input type="text" name="nome" id="name" placeholder="Digite seu nome" required>
                 </div>
                 <div class="register-form-group">
                     <label for="dob">Data de Nascimento</label>
-                    <input type="date" id="dob">
+                    <input type="date" name="data_nascimento" id="dob" min="1910-01-01" max="2024-12-31" required>
                 </div>
                 <div class="register-form-group">
                     <label for="email">Endereço de Email</label>
-                    <input type="email" id="email" placeholder="Digite seu email">
+                    <input type="email" name="email" id="email" placeholder="Digite seu email" required>
                 </div>
-                <div class="register-form-group">
+                
+                <div class="register-form-group password-container">
                     <label for="password">Senha</label>
-                    <input type="password" id="password" placeholder="Digite sua senha">
+                    <input type="password" name="senha" id="password" placeholder="Digite sua senha" required>
+                    <span class="toggle-password" onclick="togglePassword('password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+
+                <div class="register-form-group password-container">
+                    <label for="confirm-password">Confirmar Senha</label>
+                    <input type="password" name="confirmacao_senha" id="confirm-password" placeholder="Confirme sua senha" required>
+                    <span class="toggle-password" onclick="togglePassword('confirm-password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
                 </div>
                 <div class="d-flex justify-content-center mt-3">
                     <button type="submit" class="register-btn">Cadastrar</button>
+                    <button type="button" class="back-btn" onclick="window.location.href='/'">Voltar</button>
                 </div>
             </form>
-            <div class="back-to-login mt-3">
-                <a href="/">Voltar para o login</a>
-            </div>
         </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/static/js/formToJson.js"></script>
+
+<script>
+    function togglePassword(id) {
+        const passwordField = document.getElementById(id);
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+        const icon = passwordField.nextElementSibling.querySelector('i');
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+    }
+
+    document.getElementById('register-form').addEventListener('submit', function(event) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        if (password !== confirmPassword) {
+            event.preventDefault();
+            alert('As senhas não coincidem!');
+            return;
+        }
+
+        const email = document.getElementById('email').value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            event.preventDefault();
+            alert('Por favor, insira um email válido.');
+            return;
+        }
+
+        const dob = document.getElementById('dob').value;
+        const dobDate = new Date(dob);
+        const minDate = new Date('1910-01-01');
+        const maxDate = new Date('2024-12-31');
+        if (dobDate < minDate || dobDate > maxDate) {
+            event.preventDefault();
+            alert('Por favor, insira uma data de nascimento válida (1910-2024).');
+            return;
+        }
+    });
+</script>
+
 {% endblock %}
