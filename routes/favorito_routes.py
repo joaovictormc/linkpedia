@@ -127,7 +127,7 @@ async def list_categorias(request: Request):
 @router.get("/sobre", response_class=HTMLResponse)
 async def get_sobre(request: Request):
     return templates.TemplateResponse(
-        "sobre.html",
+        "pages/favorito/sobre.html",
         {
             "request": request
         },

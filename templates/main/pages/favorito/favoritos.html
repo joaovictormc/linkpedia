@@ -271,8 +271,8 @@
             <button class="btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
             <div class="btn-group">
                 <button class="btn" id="profileBtn"><i class="fas fa-user"></i> Perfil</button>
-                <button class="btn" id="aboutBtn"><i class="fas fa-info-circle"></i> Sobre</button>
-                <button class="btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                <button class="btn" onclick="window.location.href='/sobre'" id="aboutBtn"><i class="fas fa-info-circle"></i> Sobre</button>
+                <button class="btn" onclick="window.location.href='/'" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
             </div>
         </div>
 
@@ -610,13 +610,14 @@
         async function addCategory() {
             const nome = document.getElementById('newCategoryName').value;
             const icone = document.getElementById('newCategoryIcon').value;
+            const formData = new FormData();
+            formData.append('nome', nome);
+            formData.append('icone', icone);
+    
             try {
-                const response = await fetch('/categoria/add', {
+                const response = await fetch('favorito/categoria/add', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ nome, icone })
+                    body: formData
                 });
                 if (!response.ok) throw new Error('Erro ao adicionar categoria');
                 loadCategories();
@@ -625,6 +626,7 @@
                 console.error('Erro ao adicionar categoria:', error);
                 showToast('Erro ao adicionar categoria');
             }
+
             $('#addCategoryModal').modal('hide');
         }
 
@@ -659,12 +661,13 @@
         }
         
         async function deleteCategory(id) {
+            const formData = new FormData();
+            formData.append('id', id);
+
             try {
-                const response = await fetch(`/categoria/delete/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                const response = await fetch(`favorito/categoria/remover`, {
+                    method: 'POST',
+                    body: formData
                 });
                 if (!response.ok) throw new Error('Erro ao excluir categoria');
                 loadCategories();
@@ -674,6 +677,7 @@
                 showToast('Erro ao excluir categoria');
             }
         }
+
 
         document.getElementById('searchInput').addEventListener('input', function () {
             const filter = this.value.toLowerCase();
