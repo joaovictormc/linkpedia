@@ -1,4 +1,6 @@
-# Sobre o Projeto
+# LinkPédia
+
+## Sobre o Projeto
 
 Linkpedia é um gerenciador de links que permite aos usuários adicionar URLs com descrições e categorizá-los para melhor organização. Além disso, é possível associar ícones personalizados às categorias para uma identificação visual rápida dos temas dos links armazenados.
 
