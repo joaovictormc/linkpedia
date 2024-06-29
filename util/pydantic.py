@@ -23,4 +23,4 @@ def create_validation_errors(instance, field_names, error_messages):
     errors_obj = ValidationError.from_exception_data(
         title="detail", line_errors=validation_errors
     )
-    return {"detail": errors_obj.errors(include_input=False, include_url=False)}
+    return {"detail": errors_obj.errors()}

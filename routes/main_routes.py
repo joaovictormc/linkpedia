@@ -108,12 +108,14 @@ async def post_login(login_dto: LoginDTO):
         or (not usuario_entrou.senha)
         or (not conferir_senha(login_dto.senha, usuario_entrou.senha))
     ):
-        return JSONResponse(content={"detail": create_validation_errors(
+        return JSONResponse(
+            content=create_validation_errors(
                 login_dto,
                 ["email", "senha"],
                 ["Credenciais inválidas.", "Credenciais inválidas."],
-            )})
-  
+            ),
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
     token = gerar_token()
     if not UsuarioRepo.alterar_token(usuario_entrou.id, token):
         raise HTTPException(status_code=400, detail="Não foi possível alterar o token do usuário no banco de dados.")  
