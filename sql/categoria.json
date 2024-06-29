@@ -1,18 +1,18 @@
 [
     {
         "nome": "Tecnologia",
-        "icone": "fa-laptop"
+        "icone": "desktop_mac"
     },
     {
         "nome": "Esportes",
-        "icone": "fa-futbol-o"
+        "icone": "sports_soccer"
     },
     {
         "nome": "Moda",
-        "icone": "fa-shopping-bag"
+        "icone": "shopping_bag"
     },
     {
         "nome": "Viagem",
-        "icone": "fa-plane"
+        "icone": "flight"
     }
 ]
