@@ -1,8 +1,8 @@
-# LinkPédia
- 
 # Sobre o Projeto
 
-Este projeto foi realizado por Alessandro Carvalho Santos e João Victor Maciel Campos como parte da disciplina de Desenvolvimento Web ministrada pelo professor Ricardo Maróquio.
+Linkpedia é um gerenciador de links que permite aos usuários adicionar URLs com descrições e categorizá-los para melhor organização. Além disso, é possível associar ícones personalizados às categorias para uma identificação visual rápida dos temas dos links armazenados.
+
+Este projeto foi realizado por Alessandro Carvalho Santos e João Victor Maciel Campos como parte da disciplina de Desenvolvimento Web, do IFES Campus Cachoeiro de Itapemirim - ES ministrada pelo professor Ricardo Maróquio.
 
 ## Tecnologias e Bibliotecas Utilizadas
 
