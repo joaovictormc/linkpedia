@@ -1,0 +1,231 @@
+{% extends "pages/base.html" %}
+
+{% block subtitulo %} LinkPédia - Cadastro {% endblock %}
+
+{% block topo %}
+<!-- Adicionando o link para os ícones do Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+    .register-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+    .register-card {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        max-width: 700px;
+        width: 100%;
+        position: relative;
+    }
+    .register-header {
+        text-align: center;
+        background: #5A189A;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        padding: 2rem 1rem 1rem 1rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .register-header img {
+        width: 100px;
+        margin-bottom: 0.5rem;
+    }
+    .register-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #fff;
+        font-weight: bolder;
+    }
+    .register-form-group {
+        margin-bottom: 1.5rem;
+    }
+    .register-form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+    .register-form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .password-container {
+        position: relative;
+        display: block;
+        align-items: center;
+    }
+    .password-container input {
+        width: 100%;
+        padding-right: 2.5rem;
+    }
+    .password-container .toggle-password {
+        position: absolute;
+        right: 10px;
+        display: flex;
+        top: 48px;
+        cursor: pointer;
+        font-size: 1.25rem;
+        color: #666;
+    }
+    .register-btn {
+        background: #5A189A;
+        border: none;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        width: 48%;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        margin-right: 4%;
+        font-weight:bolder;
+
+    }
+    .register-btn:hover {
+        background: #3C096C;
+    }
+    .back-btn {
+        background: #ccc;
+        border: none;
+        color: #333;
+        padding: 0.75rem 1.5rem;
+        width: 48%;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        font-weight:bolder;
+    }
+    .back-btn:hover {
+        background: #bbb;
+    }
+    .register-links {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    .register-links a {
+        color: #5A189A;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .register-links a:hover {
+        text-decoration: underline;
+    }
+    .back-to-login {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    .back-to-login a {
+        color: #5A189A;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .back-to-login a:hover {
+        text-decoration: underline;
+    }
+
+    .error-message{
+        padding:10px;
+        background-color: red;
+        font-weight:bold;
+        color:white;
+        text-align:center;
+    }
+</style>
+
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-header">
+            <img src="/static/img/linkpedia.png" alt="LinkPédia Logo">
+            <h3>Cadastro no LinkPédia</h3>
+        </div>
+        <div class="register-body mt-3">
+            <form id="register-form" class="json-form" method="post" action="post_perfil">
+                <div class="register-form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" name="nome" id="name" placeholder="Digite seu nome" required>
+                </div>
+                <div class="register-form-group">
+                    <label for="dob">Data de Nascimento</label>
+                    <input type="date" name="data_nascimento" id="dob" min="1910-01-01" max="2024-12-31" required>
+                </div>
+                <div class="register-form-group">
+                    <label for="email">Endereço de Email</label>
+                    <input type="email" name="email" id="email" placeholder="Digite seu email" required>
+                </div>
+                
+                <div class="register-form-group password-container">
+                    <label for="password">Senha</label>
+                    <input type="password" name="senha" id="password" placeholder="Digite sua senha" required>
+                    <span class="toggle-password" onclick="togglePassword('password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+
+                <div class="register-form-group password-container">
+                    <label for="confirm-password">Confirmar Senha</label>
+                    <input type="password" name="confirmacao_senha" id="confirm-password" placeholder="Confirme sua senha" required>
+                    <span class="toggle-password" onclick="togglePassword('confirm-password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <button type="submit" class="register-btn">Atualizar</button>
+                    <button type="button" class="back-btn" onclick="window.location.href='/favorito'">Voltar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/formToJson.js"></script>
+
+<script>
+    function togglePassword(id) {
+        const passwordField = document.getElementById(id);
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+        const icon = passwordField.nextElementSibling.querySelector('i');
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+    }
+
+    document.getElementById('register-form').addEventListener('submit', function(event) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        if (password !== confirmPassword) {
+            event.preventDefault();
+            alert('As senhas não coincidem!');
+            return;
+        }
+
+        const email = document.getElementById('email').value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            event.preventDefault();
+            alert('Por favor, insira um email válido.');
+            return;
+        }
+
+        const dob = document.getElementById('dob').value;
+        const dobDate = new Date(dob);
+        const minDate = new Date('1910-01-01');
+        const maxDate = new Date('2024-12-31');
+        if (dobDate < minDate || dobDate > maxDate) {
+            event.preventDefault();
+            alert('Por favor, insira uma data de nascimento válida (1910-2024).');
+            return;
+        }
+    });
+</script>
+
+{% endblock %}
