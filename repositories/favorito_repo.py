@@ -24,9 +24,10 @@ class FavoritoRepo:
                 cursor.execute(
                     SQL_INSERIR,
                     (
-                        favorito.id,
-                        favorito.id_usuario,
-                        favorito.id_link,
+                        favorito.nome,
+                        favorito.url,
+                        favorito.id_categoria,
+                        favorito.id_usuario
                     ),
                 )
                 conexao.commit()
@@ -44,9 +45,10 @@ class FavoritoRepo:
                 cursor.execute(
                     SQL_ALTERAR,
                     (
-                        favorito.id_usuario,
-                        favorito.id_link,
-                        favorito.id,
+                        favorito.nome,
+                        favorito.url,
+                        favorito.id_categoria,
+                        favorito.id
                     ),
                 )
                 conexao.commit()

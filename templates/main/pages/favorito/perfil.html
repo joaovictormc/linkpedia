@@ -146,41 +146,44 @@
     <div class="register-card">
         <div class="register-header">
             <img src="/static/img/linkpedia.png" alt="LinkPédia Logo">
-            <h3>Cadastro no LinkPédia</h3>
+            <h3>Atualização no LinkPédia</h3>
         </div>
         <div class="register-body mt-3">
             <form id="register-form" class="json-form" method="post" action="post_perfil">
                 <div class="register-form-group">
                     <label for="name">Nome</label>
-                    <input type="text" name="nome" id="name" placeholder="Digite seu nome" required>
+                    <input type="text" name="nome" id="name" value="{{request.state.usuario.nome}}" placeholder="Digite seu nome" required>
                 </div>
                 <div class="register-form-group">
                     <label for="dob">Data de Nascimento</label>
-                    <input type="date" name="data_nascimento" id="dob" min="1910-01-01" max="2024-12-31" required>
+                    <input type="date" name="data_nascimento" value="{{request.state.usuario.data_nascimento}}" id="dob" min="1910-01-01" max="2024-12-31" required>
                 </div>
                 <div class="register-form-group">
                     <label for="email">Endereço de Email</label>
-                    <input type="email" name="email" id="email" placeholder="Digite seu email" required>
+                    <input type="email" name="email" id="email" value="{{request.state.usuario.email}}" placeholder="Digite seu email" required>
                 </div>
                 
                 <div class="register-form-group password-container">
-                    <label for="password">Senha</label>
-                    <input type="password" name="senha" id="password" placeholder="Digite sua senha" required>
+                    <label for="password">Nova Senha</label>
+                    <input type="password" name="senha" id="password"  placeholder="Digite sua senha" required>
                     <span class="toggle-password" onclick="togglePassword('password')">
                         <i class="fas fa-eye"></i>
                     </span>
                 </div>
 
                 <div class="register-form-group password-container">
-                    <label for="confirm-password">Confirmar Senha</label>
-                    <input type="password" name="confirmacao_senha" id="confirm-password" placeholder="Confirme sua senha" required>
+                    <label for="confirm-password">Confirmar nova Senha</label>
+                    <input type="password" name="confirmacao_senha" id="confirm-password"  placeholder="Confirme sua senha" required>
                     <span class="toggle-password" onclick="togglePassword('confirm-password')">
                         <i class="fas fa-eye"></i>
                     </span>
                 </div>
+
+                <input type="hidden" name="id" id="id_usuario" value="{{request.state.usuario.id}}">
+
                 <div class="d-flex justify-content-center mt-3">
                     <button type="submit" class="register-btn">Atualizar</button>
-                    <button type="button" class="back-btn" onclick="window.location.href='/favorito'">Voltar</button>
+                    <button type="button" class="back-btn" onclick="window.location.href='/favoritos'">Voltar</button>
                 </div>
             </form>
         </div>

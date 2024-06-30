@@ -17,7 +17,7 @@ from util.auth import (
     obter_hash_senha,
 )
 
-from util.cookies import adicionar_cookie_auth, adicionar_mensagem_erro, adicionar_mensagem_sucesso
+from util.cookies import NOME_COOKIE_AUTH, adicionar_cookie_auth, adicionar_mensagem_erro, adicionar_mensagem_sucesso
 from util.html import ler_html
 from util.pydantic import create_validation_errors
 

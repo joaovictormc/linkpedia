@@ -31,19 +31,12 @@
         transition: background-color 0.3s ease;
     }
 
-    .sidebar .nav-link:hover, .sidebar .nav-link:focus {
-        background-color: #6a0dad;
-    }
-
-    .sidebar .nav-link.active {
-        background-color: #4b0082;
-    }
-
     .sidebar .nav-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 10px 15px;
+        width: 100%;
     }
 
     .sidebar .btn-group {
@@ -89,7 +82,7 @@
 
     .toast {
         position: absolute;
-        top: 20px;
+        top: 60px;
         right: 20px;
         z-index: 1060;
         background-color: #44475a;
@@ -212,9 +205,13 @@
     }
 
     .btn-danger {
-        background-color: #ff5555;
-        border-color: #6a0dad;
-        cursor: pointer;
+        background-color: #ff5555 !important;
+        color: white !important;
+        cursor: pointer !important;
+    }
+
+    .btn-danger:hover {
+        background-color: #ff7b7b !important
     }
 
     .btn-danger:hover, .btn-danger:focus, .btn-danger:active {
@@ -226,11 +223,13 @@
         background-color: #6a0dad;
         border-color: #6a0dad;
         cursor: pointer;
+        color: white;
     }
 
     .btn-info:hover, .btn-info:focus, .btn-info:active {
         background-color: #4b0082;
         border-color: #4b0082;
+        color: white;
     }
 
     .btn-light {
@@ -258,7 +257,7 @@
             <div class="sidebar-sticky">
                 <div class="d-flex justify-content-between align-items-center px-3 mb-3">
                     <h5>Barra de Favoritos</h5>
-                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addCategoryModal"><i class="fas fa-plus"></i></button>
+                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal"><i class="fas fa-plus"></i></button>
                 </div>
                 <ul class="nav flex-column" id="categoryList">
                     <!-- As categorias serão carregadas dinamicamente -->
@@ -270,8 +269,8 @@
         <div class="top-bar" id="topBar">
             <button class="btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
             <div class="btn-group">
-                <button class="btn" id="profileBtn" onclick="window.location.href='/perfil'"><i class="fas fa-user"></i> Perfil</button>
-                <button class="btn" onclick="window.location.href='/sobre'" id="aboutBtn"><i class="fas fa-info-circle"></i> Sobre</button>
+                <button class="btn" id="profileBtn" onclick="window.location.href='favorito/perfil'"><i class="fas fa-user"></i> Perfil</button>
+                <button class="btn" onclick="window.location.href='favorito/sobre'" id="aboutBtn"><i class="fas fa-info-circle"></i> Sobre</button>
                 <button class="btn" onclick="window.location.href='/'" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
             </div>
         </div>
@@ -279,11 +278,11 @@
         <!-- Main content -->
         <div class="row content">
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <h2>Favoitos</h2>
+                <h2>Favoritos</h2>
                 <div class="search-bar">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Buscar bookmark...">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Buscar favoritos...">
                 </div>
-                <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addModal"><i class="fas fa-plus"></i> Adicionar Favorito</button>
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fas fa-plus"></i> Adicionar Favorito</button>
                 <div class="table-responsive">
                     <table class="table table-dark table-striped table-hover fade-in" id="bookmarksTable">
                         <thead>
@@ -309,8 +308,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addModalLabel">Adicionar Favorito</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="addForm">
@@ -331,7 +329,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" onclick="addBookmark()">Adicionar</button>
                 </div>
             </div>
@@ -344,8 +342,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addCategoryModalLabel">Adicionar Categoria</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="addCategoryForm">
@@ -361,7 +358,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" onclick="addCategory()">Adicionar</button>
                 </div>
             </div>
@@ -374,8 +371,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editCategoryModalLabel">Editar Categoria</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editCategoryForm">
@@ -391,7 +387,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" onclick="saveCategoryChanges()">Salvar</button>
                 </div>
             </div>
@@ -404,8 +400,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">Editar Bookmark</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editForm">
@@ -417,10 +412,16 @@
                             <label class="new-bookmark" for="bookmarkURL">URL</label>
                             <input type="url" class="form-control" id="bookmarkURL" required>
                         </div>
+                        <div class="form-group">
+                            <label class="new-bookmark" for="editBookmarkCategory">Categoria</label>
+                            <select class="form-control" id="editBookmarkCategory" required>
+                                <!-- As opções serão carregadas dinamicamente -->
+                            </select>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" onclick="saveChanges()">Salvar</button>
                 </div>
             </div>
@@ -433,14 +434,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">Excluir Favorito</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     Tem certeza de que deseja excluir este favorito?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-danger" onclick="deleteBookmark()">Excluir</button>
                 </div>
             </div>
@@ -454,29 +454,27 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     <script>
         let currentEditId = null;
         let currentDeleteId = null;
         let currentEditCategoryId = null;
+        let createdCategoryId = null; // Variável global para armazenar o ID da categoria criada
+        let selectedCategoryId = null; // Variável global para armazenar a categoria selecionada
 
         // Função para mostrar notificações
         function showToast(message) {
             const toast = document.getElementById('toastNotification');
             toast.querySelector('.toast-body').innerText = message;
-            $(toast).toast({ delay: 2000 });
-            $(toast).toast('show');
+            const bootstrapToast = new bootstrap.Toast(toast);
+            bootstrapToast.show();
         }
 
         // Função para atualizar contadores de categorias
         function updateCategoryCounters() {
             const categories = document.querySelectorAll('#categoryList .nav-item');
             categories.forEach(category => {
-                const categoryName = category.querySelector('.nav-link').innerText.trim();
-                const count = document.querySelectorAll(`#bookmarksTable tbody tr[data-category="${categoryName}"]`).length;
+                const categoryId = category.querySelector('.nav-link').getAttribute('onclick').match(/\d+/)[0];
+                const count = document.querySelectorAll(`#bookmarksTable tbody tr[data-category="${categoryId}"]`).length;
                 category.querySelector('.badge').innerText = count;
             });
         }
@@ -488,13 +486,15 @@
                 const categories = await response.json();
                 const categoryList = document.getElementById('categoryList');
                 const bookmarkCategorySelect = document.getElementById('bookmarkCategory');
+                const editBookmarkCategorySelect = document.getElementById('editBookmarkCategory');
                 categoryList.innerHTML = '';
                 bookmarkCategorySelect.innerHTML = '';
+                editBookmarkCategorySelect.innerHTML = '';
                 categories.forEach(category => {
                     const newItem = document.createElement('li');
                     newItem.className = 'nav-item';
                     newItem.innerHTML = `
-                        <a class="nav-link" href="#"><i class="fas ${category.icone}"></i> ${category.nome} <span class="badge badge-light">0</span></a>
+                        <a class="nav-link" href="#" onclick="setSelectedCategory(${category.id})"><i class="fas ${category.icone}"></i> ${category.nome} <span class="badge badge-light">0</span></a>
                         <div class="btn-group">
                             <button class="btn btn-sm btn-info" onclick="editCategory(${category.id}, '${category.nome}', '${category.icone}')"><i class="fas fa-edit"></i></button>
                             <button class="btn btn-sm btn-danger" onclick="deleteCategory(${category.id})"><i class="fas fa-trash-alt"></i></button>
@@ -503,33 +503,54 @@
                     categoryList.appendChild(newItem);
 
                     const newOption = document.createElement('option');
-                    newOption.value = category.nome;
+                    newOption.value = category.id;
                     newOption.innerText = category.nome;
                     bookmarkCategorySelect.appendChild(newOption);
+
+                    const editOption = document.createElement('option');
+                    editOption.value = category.id;
+                    editOption.innerText = category.nome;
+                    editBookmarkCategorySelect.appendChild(editOption);
                 });
                 updateCategoryCounters();
+                // Define a primeira categoria como selecionada se nenhuma estiver selecionada
+                if (!selectedCategoryId && categories.length > 0) {
+                    selectedCategoryId = categories[0].id;
+                }
+                loadBookmarks(); // Recarrega os favoritos com a categoria selecionada
             } catch (error) {
                 console.error('Erro ao carregar categorias:', error);
             }
         }
 
+        function setSelectedCategory(id) {
+            selectedCategoryId = id;
+            loadBookmarks();
+        }
+
         // Função para carregar bookmarks do backend
         async function loadBookmarks() {
+            const id_usuario = {{request.state.usuario.id}};  // Assumindo que o ID do usuário é conhecido
+            const id_categoria = selectedCategoryId;  // Usa a categoria selecionada
+            const filter = document.getElementById('searchInput').value || '';  // Filtro de texto
+            
+            const params = new URLSearchParams({ id_usuario, id_categoria, filter }).toString();
+            
             try {
-                const response = await fetch('/favorito/list');
+                const response = await fetch(`/favorito/list?${params}`);
                 const bookmarks = await response.json();
                 const table = document.querySelector('#bookmarksTable tbody');
                 table.innerHTML = '';
                 bookmarks.forEach((bookmark, index) => {
                     const newRow = document.createElement('tr');
-                    newRow.setAttribute('data-category', bookmark.category);
+                    newRow.setAttribute('data-category', bookmark.id_categoria);
                     newRow.innerHTML = `
                         <th scope="row">${index + 1}</th>
-                        <td>${bookmark.name}</td>
+                        <td>${bookmark.nome}</td>
                         <td><a href="${bookmark.url}" target="_blank">${bookmark.url}</a></td>
                         <td>
-                            <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#editModal" onclick="setEditModal(${bookmark.id}, '${bookmark.name}', '${bookmark.url}')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="setDeleteModal(${bookmark.id})"><i class="fas fa-trash-alt"></i></button>
+                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editModal" onclick="setEditModal(${bookmark.id}, '${bookmark.nome}', '${bookmark.url}', '${bookmark.id_categoria}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteModal(${bookmark.id})"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     `;
                     table.appendChild(newRow);
@@ -540,17 +561,29 @@
             }
         }
 
+
         // Função para salvar bookmarks no backend
         async function saveBookmark(bookmark, isEdit = false) {
-            const url = isEdit ? `/favorito/edit/${bookmark.id}` : '/favorito/add';
-            const method = isEdit ? 'PUT' : 'POST';
+            const url = isEdit ? `/favorito/update` : '/favorito/add';
+            const method = 'POST';
+            
+            const formData = new FormData();
+            formData.append('nome', bookmark.nome);
+            formData.append('url', bookmark.url);
+            formData.append('id_categoria', bookmark.category);
+            if (!bookmark.id_usuario) {
+                formData.append('id_usuario',{{request.state.usuario.id}} );
+            }
+
+            if(isEdit)
+                formData.append('id',bookmark.id);
+
             try {
+
+                a = formData
                 const response = await fetch(url, {
                     method,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(bookmark)
+                    body: formData
                 });
                 if (!response.ok) throw new Error('Erro ao salvar favorito');
                 loadBookmarks();
@@ -561,55 +594,72 @@
             }
         }
 
-        function setEditModal(id, name, url) {
+        function setEditModal(id, name, url, category) {
             currentEditId = id;
             document.getElementById('bookmarkName').value = name;
             document.getElementById('bookmarkURL').value = url;
+            document.getElementById('editBookmarkCategory').value = category;
         }
 
         async function saveChanges() {
-            const name = document.getElementById('bookmarkName').value;
+            const nome = document.getElementById('bookmarkName').value;
             const url = document.getElementById('bookmarkURL').value;
-            const bookmark = { id: currentEditId, name, url };
+            const category = document.getElementById('editBookmarkCategory').value;
+
+            const bookmark = { id: currentEditId, nome, url, category };
             saveBookmark(bookmark, true);
-            $('#editModal').modal('hide');
+            const editModal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+            editModal.hide();
         }
 
         function setDeleteModal(id) {
             currentDeleteId = id;
         }
 
-        async function deleteBookmark() {
+        async function deleteBookmark(id) {
+            const formData = new FormData();
+            formData.append('id', currentDeleteId);
             try {
-                const response = await fetch(`/favorito/remove`, {
+                const response = await fetch('favorito/remove', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id: currentDeleteId })
+                    body: formData
                 });
                 if (!response.ok) throw new Error('Erro ao excluir favorito');
                 loadBookmarks();
-                $('#deleteModal').modal('hide');
-                showToast('Bookmark excluído com sucesso!');
+                const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                deleteModal.hide();
+                showToast('Favorito excluído com sucesso!');
             } catch (error) {
                 console.error('Erro ao excluir favorito:', error);
                 showToast('Erro ao excluir favorito');
             }
         }
+        
+
+
 
         async function addBookmark() {
-            const name = document.getElementById('newBookmarkName').value;
+            const nome = document.getElementById('newBookmarkName').value;
             const url = document.getElementById('newBookmarkURL').value;
             const category = document.getElementById('bookmarkCategory').value;
-            const bookmark = { name, url, category };
+
+            document.getElementById('newBookmarkName').value = null;
+            document.getElementById('newBookmarkURL').value = null;
+            document.getElementById('bookmarkCategory').value = null;
+
+            const bookmark = { nome, url, category };
             saveBookmark(bookmark);
-            $('#addModal').modal('hide');
+            const addModal = bootstrap.Modal.getInstance(document.getElementById('addModal'));
+            addModal.hide();
         }
 
         async function addCategory() {
             const nome = document.getElementById('newCategoryName').value;
             const icone = document.getElementById('newCategoryIcon').value;
+
+            document.getElementById('newCategoryName').value = null;
+            document.getElementById('newCategoryIcon').value = null;
+
             const formData = new FormData();
             formData.append('nome', nome);
             formData.append('icone', icone);
@@ -620,6 +670,9 @@
                     body: formData
                 });
                 if (!response.ok) throw new Error('Erro ao adicionar categoria');
+                const data = await response.json();
+                createdCategoryId = data.id; // Armazena o ID da categoria criada na variável global
+                selectedCategoryId = createdCategoryId; // Define a categoria criada como selecionada
                 loadCategories();
                 showToast('Categoria adicionada com sucesso!');
             } catch (error) {
@@ -627,14 +680,16 @@
                 showToast('Erro ao adicionar categoria');
             }
 
-            $('#addCategoryModal').modal('hide');
+            const addCategoryModal = bootstrap.Modal.getInstance(document.getElementById('addCategoryModal'));
+            addCategoryModal.hide();
         }
 
         async function editCategory(id, nome, icone) {
             currentEditCategoryId = id;
             document.getElementById('editCategoryName').value = nome;
             document.getElementById('editCategoryIcon').value = icone;
-            $('#editCategoryModal').modal('show');
+            const editCategoryModal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
+            editCategoryModal.show();
         }
 
         async function saveCategoryChanges() {
@@ -657,7 +712,8 @@
                 console.error('Erro ao editar categoria:', error);
                 showToast('Erro ao editar categoria');
             }
-            $('#editCategoryModal').modal('hide');
+            const editCategoryModal = bootstrap.Modal.getInstance(document.getElementById('editCategoryModal'));
+            editCategoryModal.hide();
         }
         
         async function deleteCategory(id) {

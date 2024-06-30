@@ -15,9 +15,10 @@ SQL_INSERIR = """
     VALUES (?, ?, ?, ?)
 """
 
+
 SQL_ALTERAR = """
     UPDATE favorito
-    SET nome = ?, url = ?, id_categoria = ?, id_usuario = ?
+    SET nome = ?, url = ?, id_categoria = ?
     WHERE id = ?
 """
 
@@ -33,11 +34,9 @@ SQL_OBTER_POR_ID = """
 """
 
 SQL_OBTER_TODOS = """
-    SELECT f.id, f.nome, f.url, c.nome as categoria, u.nome as usuario
-    FROM favorito f
-    INNER JOIN categoria c ON f.id_categoria = c.id
-    INNER JOIN usuario u ON f.id_usuario = u.id
-    ORDER BY f.nome
+    SELECT *
+    FROM favorito 
+    ORDER BY nome
 """
 
 SQL_ALTERAR_CATEGORIA = """

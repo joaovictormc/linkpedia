@@ -15,7 +15,7 @@ from util.cookies import adicionar_mensagem_sucesso, excluir_cookie_auth
 from util.templates import obter_jinja_templates
 
 router = APIRouter(prefix="/favorito")
-templates = obter_jinja_templates("templates/favorito")
+templates = obter_jinja_templates("templates/main")
 
 # @router.get("/index", response_class=HTMLResponse)
 # async def get_index(request: Request):
@@ -28,10 +28,10 @@ templates = obter_jinja_templates("templates/favorito")
 
 # Rota para adicionar um favorito
 @router.post("/add", response_class=JSONResponse)
-async def add_favorito(request: Request, id_link: int = Form(...)):
+async def add_favorito(request: Request, nome: str = Form(...), url: str = Form(...), id_categoria: str = Form(...), id_usuario: int = Form(None)):
     try:
-        id_usuario = request.state.usuario.id  # Assumindo que o usuário está no estado da requisição
-        novo_favorito = Favorito(id_usuario=id_usuario, id_link=id_link)
+    
+        novo_favorito = Favorito(id_usuario=id_usuario, nome=nome, id_categoria=id_categoria, url=url)
         FavoritoRepo.inserir(novo_favorito)
         return JSONResponse(
             content={"message": "Favorito adicionado com sucesso!"},
@@ -42,7 +42,22 @@ async def add_favorito(request: Request, id_link: int = Form(...)):
             content={"message": f"Erro ao adicionar favorito: {str(e)}"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
-
+        
+@router.post("/update", response_class=JSONResponse)
+async def update_categoria(request: Request,id:str=Form(...), nome: str = Form(...), url: str = Form(...), id_categoria: str = Form(...), id_usuario: int = Form(None)):
+    try:
+        favorito = Favorito(id=id, id_usuario=id_usuario, nome=nome, id_categoria=id_categoria, url=url)
+        FavoritoRepo.alterar(favorito)
+        return JSONResponse(
+            content={"message": "Favorito atualizada com sucesso!"},
+            status_code=status.HTTP_200_OK,
+        )
+    except DatabaseError as e:
+        return JSONResponse(
+            content={"message": f"Erro ao atualizar o favorito: {str(e)}"},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+        
 # Rota para remover um favorito
 @router.post("/remove", response_class=JSONResponse)
 async def remove_favorito(request: Request, id: int = Form(...)):
@@ -60,12 +75,25 @@ async def remove_favorito(request: Request, id: int = Form(...)):
 
 # Rota para listar todos os favoritos do usuário
 @router.get("/list", response_class=JSONResponse)
-async def list_favoritos(request: Request):
+async def list_favoritos(request: Request, id_usuario: int, id_categoria: int = None, filter: str = None):
     try:
-        id_usuario = request.state.usuario.id  # Assumindo que o usuário está no estado da requisição
+
         favoritos = FavoritoRepo.obter_todos()
+        # Filtrando por usuário
         favoritos_usuario = [f for f in favoritos if f.id_usuario == id_usuario]
-        return JSONResponse(content=favoritos_usuario, status_code=status.HTTP_200_OK)
+
+        # Filtrando por categoria, se fornecida
+        if id_categoria is not None:
+            favoritos_usuario = [f for f in favoritos_usuario if f.id_categoria == id_categoria]
+        
+        # Aplicando filtro de texto, se fornecido
+        if filter:
+            filter = filter.lower()
+            favoritos_usuario = [f for f in favoritos_usuario if filter in f.nome.lower() or filter in f.url.lower()]
+        
+        favoritos_dict = [{"id": fav.id, "nome": fav.nome, "url": fav.url, "id_categoria": fav.id_categoria, "id_usuario": fav.id_usuario} for fav in favoritos_usuario]
+
+        return JSONResponse(content=favoritos_dict, status_code=status.HTTP_200_OK)
     except DatabaseError as e:
         return JSONResponse(
             content={"message": f"Erro ao listar favoritos: {str(e)}"},
@@ -131,7 +159,7 @@ async def list_categorias(request: Request):
 @router.get("/sobre", response_class=HTMLResponse)
 async def get_sobre(request: Request):
     return templates.TemplateResponse(
-        "sobre.html",
+        "pages/favorito/sobre.html",
         {
             "request": request
         },

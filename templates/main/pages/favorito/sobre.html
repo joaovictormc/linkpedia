@@ -48,6 +48,21 @@
     a:hover {
         text-decoration: underline;
     }
+
+    .btn-back {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #ff79c6;
+        color: #ffffff;
+        text-align: center;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .btn-back:hover {
+        background-color: #e066b2;
+    }
 </style>
 
 <div class="container mt-5">
@@ -76,5 +91,8 @@
             <i class="fab fa-github tech-icon"></i>Repositório do Projeto no GitHub
         </a>
     </p>
+    <div class="text-center mt-4">
+        <a href="/favoritos" class="btn-back">Voltar para Favoritos</a>
+    </div>
 </div>
 {% endblock %}
