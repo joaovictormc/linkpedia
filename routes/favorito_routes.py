@@ -2,25 +2,29 @@ from sqlite3 import DatabaseError
 from fastapi import APIRouter, HTTPException, Request, status, Form
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from typing import List
+from dtos.novo_usuario_dto import NovoUsuarioDTO
 from models.categoria_model import Categoria
 from models.favorito_model import Favorito
+from models.usuario_model import Usuario
 from repositories.categoria_repo import CategoriaRepo
 from repositories.favorito_repo import FavoritoRepo
 
+from repositories.usuario_repo import UsuarioRepo
+from util.auth import obter_hash_senha
 from util.cookies import adicionar_mensagem_sucesso, excluir_cookie_auth
 from util.templates import obter_jinja_templates
 
 router = APIRouter(prefix="/favorito")
 templates = obter_jinja_templates("templates/favorito")
 
-@router.get("/index", response_class=HTMLResponse)
-async def get_index(request: Request):
-    return templates.TemplateResponse(
-        "pages/favorito/favoritos.html",
-        {
-            "request": request
-        },
-    )
+# @router.get("/index", response_class=HTMLResponse)
+# async def get_index(request: Request):
+#     return templates.TemplateResponse(
+#         "pages/favorito/favoritos.html",
+#         {
+#             "request": request
+#         },
+#     )
 
 # Rota para adicionar um favorito
 @router.post("/add", response_class=JSONResponse)
@@ -127,7 +131,7 @@ async def list_categorias(request: Request):
 @router.get("/sobre", response_class=HTMLResponse)
 async def get_sobre(request: Request):
     return templates.TemplateResponse(
-        "pages/favorito/sobre.html",
+        "sobre.html",
         {
             "request": request
         },
@@ -146,3 +150,23 @@ async def remover_categoria(request: Request, id: int = Form(...)):
             content={"message": f"Erro ao remover a categoria: {str(e)}"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
+    
+    
+
+@router.get("/perfil")
+async def get_perfil(request: Request):
+    return templates.TemplateResponse(
+        "pages/favorito/perfil.html",
+        {"request": request},
+    )
+
+
+@router.post("/post_perfil", response_class=JSONResponse)
+async def post_perfil(usuario_dto: NovoUsuarioDTO):
+    usuario_data = usuario_dto.model_dump(exclude={"confirmacao_senha"})
+    usuario_data["senha"] = obter_hash_senha(usuario_data["senha"])
+    novo_usuario = UsuarioRepo.alterar(Usuario(**usuario_data))
+    
+    if not novo_usuario or not novo_usuario.id:
+        raise HTTPException(status_code=400, detail="Erro ao atualizar o usuário.")
+    return {"redirect": {"url": "/favorito"}}

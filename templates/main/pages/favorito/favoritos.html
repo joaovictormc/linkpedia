@@ -270,7 +270,7 @@
         <div class="top-bar" id="topBar">
             <button class="btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
             <div class="btn-group">
-                <button class="btn" id="profileBtn"><i class="fas fa-user"></i> Perfil</button>
+                <button class="btn" id="profileBtn" onclick="window.location.href='/perfil'"><i class="fas fa-user"></i> Perfil</button>
                 <button class="btn" onclick="window.location.href='/sobre'" id="aboutBtn"><i class="fas fa-info-circle"></i> Sobre</button>
                 <button class="btn" onclick="window.location.href='/'" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
             </div>
@@ -279,11 +279,11 @@
         <!-- Main content -->
         <div class="row content">
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <h2>Bookmarks</h2>
+                <h2>Favoitos</h2>
                 <div class="search-bar">
                     <input type="text" id="searchInput" class="form-control" placeholder="Buscar bookmark...">
                 </div>
-                <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addModal"><i class="fas fa-plus"></i> Adicionar Bookmark</button>
+                <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addModal"><i class="fas fa-plus"></i> Adicionar Favorito</button>
                 <div class="table-responsive">
                     <table class="table table-dark table-striped table-hover fade-in" id="bookmarksTable">
                         <thead>
@@ -308,7 +308,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Adicionar Bookmark</h5>
+                    <h5 class="modal-title" id="addModalLabel">Adicionar Favorito</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
                 </div>
@@ -432,12 +432,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Excluir Bookmark</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Excluir Favorito</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    Tem certeza de que deseja excluir este bookmark?
+                    Tem certeza de que deseja excluir este favorito?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -554,7 +554,7 @@
                 });
                 if (!response.ok) throw new Error('Erro ao salvar favorito');
                 loadBookmarks();
-                showToast('Bookmark salvo com sucesso!');
+                showToast('Favorito salvo com sucesso!');
             } catch (error) {
                 console.error('Erro ao salvar favorito:', error);
                 showToast('Erro ao salvar favorito');
